@@ -1,7 +1,8 @@
 size(800, 600);
 background(255);
-rectMode(CENTRE);
+rectMode(CENTER);
 
-for(int i = 0; i < 400; i += 30){
-  rect(length/2, width/2, i, i);
+for(int i = 0; i < 1800; i += 40){
+  noFill();
+  rect(800/2, 600/2, i, i);
 }
