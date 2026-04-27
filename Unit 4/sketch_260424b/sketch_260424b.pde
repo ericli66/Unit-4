@@ -1,77 +1,60 @@
-float waveOffset = 0;
-float bottleY;
-int numFish = 8;
-float[] fishX = new float[numFish];
-float[] fishY = new float[numFish];
-float[] fishSpeed = new float[numFish];
-
 void setup() {
   size(800, 600);
-  
-  // Initialize fish positions and speeds
-  for (int i = 0; i < numFish; i++) {
-    fishX[i] = random(width);
-    fishY[i] = random(400, 580);
-    fishSpeed[i] = random(1, 3);
-  }
+  noStroke();
 }
 
 void draw() {
-  // 1. Draw the Sky and Ocean
-  background(135, 206, 235); // Sky blue
-  noStroke();
-  fill(0, 105, 148); // Deep ocean blue
-  rect(0, 300, width, 300);
+  // --- Draw the Sunset Sky ---
+  fill(255, 185, 44);
+  rect(0, 0, 800, 400);
 
-  // 2. Animate the Fish (Behind the bottle)
-  for (int i = 0; i < numFish; i++) {
-    drawFish(fishX[i], fishY[i]);
-    fishX[i] -= fishSpeed[i];
-    if (fishX[i] < -50) fishX[i] = width + 50; // Loop fish
+  // --- Draw the Sun ---
+  fill(255, 200, 50);
+  ellipse(400, 290, 100, 100); 
+
+  // --- Draw the Ocean (Height shortened to 80px) ---
+  fill(25, 25, 112); 
+  float oceanTop = 300;
+  float oceanHeight = 80;
+  rect(0, oceanTop, width, oceanHeight);
+  
+  // Sun Reflection
+  fill(255, 140, 0, 40);
+  rect(360, oceanTop, 80, oceanHeight);
+
+  // --- Draw the Swimming Fish ---
+// --- Simple Swimming Fish ---
+  for (int i = 0; i < 5; i++) {
+    // 1. Horizontal movement: frameCount moves them right. 
+    // 2. The modulo (%) resets them to the left side when they go off-screen.
+    float x = (frameCount + (i * 150)) % width; 
+    
+    // Static Y position based on their index
+    float y = 320 + (i * 15); 
+    
+    drawFish(x, y);
   }
 
-  // 3. Draw the Floating Bottle
-  // Use sin() to create a bobbing motion
-  float bobbing = sin(waveOffset) * 15; 
-  drawBottle(width/2, 300 + bobbing);
-  
-  waveOffset += 0.05;
-}
+  //Draw the Sand 
+  fill(139, 115, 85); 
+  rect(0, oceanTop + oceanHeight, width, height - (oceanTop + oceanHeight));
 
-void drawBottle(float x, float y) {
-  pushMatrix();
-  translate(x, y);
-  rotate(radians(15)); // Give it a slight tilt
-  
-  // Bottle Body
-  fill(34, 139, 34, 200); // Transparent green glass
-  stroke(20, 80, 20);
-  strokeWeight(2);
-  rect(-25, 0, 50, 100, 10); // Main body
-  
-  // Bottle Neck
-  rect(-10, -40, 20, 45); 
-  
-  // Label
-  fill(245, 245, 220);
-  noStroke();
-  rect(-20, 30, 40, 30);
-  
-  // Cork
-  fill(139, 69, 19);
-  rect(-10, -45, 20, 10);
-  
-  popMatrix();
+  // --- Draw the Wine Bottle ---
+  drawWineBottle(200, 480);
 }
 
 void drawFish(float x, float y) {
-  fill(255, 150, 0); // Orange fish
-  noStroke();
-  // Body
-  ellipse(x, y, 40, 20);
-  // Tail
-  triangle(x + 20, y, x + 35, y - 10, x + 35, y + 10);
-  // Eye
-  fill(255);
-  ellipse(x - 10, y - 2, 5, 5);
+  fill(0, 0, 50); // Silhouette
+  ellipse(x, y, 15, 8);
+  triangle(x - 7, y, x - 12, y - 5, x - 12, y + 5); // Flipped tail so they swim right
+}
+
+void drawWineBottle(float x, float y) {
+  fill(20, 60, 20, 230); 
+  rect(x, y, 40, 90, 5);  
+  rect(x + 12, y - 40, 16, 45); 
+  fill(200, 190, 160);
+  rect(x + 2, y + 25, 36, 40);
+  fill(255, 200, 100, 80);
+  rect(x + 8, y - 35, 4, 120);
 }
